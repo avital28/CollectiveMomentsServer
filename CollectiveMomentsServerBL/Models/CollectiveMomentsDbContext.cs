@@ -25,15 +25,17 @@ public partial class CollectiveMomentsDbContext : DbContext
     {
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Users__3214EC278C6ED4CC");
+            entity.HasKey(e => e.Id).HasName("PK__Users__3214EC2718E6AB9F");
 
             entity.HasIndex(e => e.Email, "UC_Email").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Birthday).HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(100);
             entity.Property(e => e.FirstName).HasMaxLength(30);
             entity.Property(e => e.LastName).HasMaxLength(30);
-            entity.Property(e => e.UserPswd).HasMaxLength(30);
+            entity.Property(e => e.Passwrd).HasMaxLength(30);
+            entity.Property(e => e.UserName).HasMaxLength(30);
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -16,4 +16,9 @@
     <ProjectReference Include="..\CollectiveMomentsServerBL\CollectiveMomentsServerBL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTO\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

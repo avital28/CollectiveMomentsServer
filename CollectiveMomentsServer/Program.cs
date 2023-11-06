@@ -1,4 +1,7 @@
-
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using CollectiveMomentsServerBL.Models;
+using Microsoft.EntityFrameworkCore;
 namespace ContactsServer
 {
     public class Program
@@ -8,8 +11,17 @@ namespace ContactsServer
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
-            builder.Services.AddControllers();
+            #region DB Context
+            string connection = builder.Configuration.GetConnectionString("CollectiveMomentsDB");
+            builder.Services.AddDbContext<CollectiveMomentsDbContext>(options =>options.UseSqlServer(connection));
+            #endregion
+            #region Json handling
+            builder.Services.AddControllers().AddJsonOptions(o=>o.JsonSerializerOptions.ReferenceHandler=ReferenceHandler.Preserve);
+            #endregion
+            #region Session Support
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options => { options.IdleTimeout = TimeSpan.FromSeconds(300); options.Cookie.HttpOnly = true; options.Cookie.IsEssential = true; });
+            #endregion
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -27,6 +39,11 @@ namespace ContactsServer
 
             app.UseAuthorization();
 
+            #region Use files and session
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseSession();
+            #endregion
 
             app.MapControllers();
 
