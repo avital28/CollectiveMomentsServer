@@ -1,6 +1,7 @@
 ﻿using CollectiveMomentsServerBL.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace CollectiveMomentsServer.Controllers
 {
@@ -16,9 +17,9 @@ namespace CollectiveMomentsServer.Controllers
         }
 
         [Route("Login")]
-        [HttpGet]
+        [HttpPost]
 
-        public async Task<ActionResult<User>> Login([FromBody] User usr)
+        public async Task<ActionResult<User>> LoginAsync([FromBody] User usr)
         {
             User user = null;
 
@@ -31,6 +32,23 @@ namespace CollectiveMomentsServer.Controllers
             return Forbid();
         }
 
+        [Route("Register")]
+        [HttpPost]
 
+        public async Task<ActionResult<User>> RegisterAsync([FromBody] User usr)
+        {
+
+            User user = context.Users.Where(u=> u.UserName==usr.UserName).FirstOrDefault();
+            if (user == null)
+            {
+                context.Users.Add(usr);
+                context.SaveChanges();
+                return Ok(usr);
+            }
+                
+            return Forbid();
+
+            
+        }
     }
 }
