@@ -38,8 +38,8 @@ namespace CollectiveMomentsServer.Controllers
         public async Task<ActionResult<User>> RegisterAsync([FromBody] User usr)
         {
 
-            User user = context.Users.Where(u=> u.UserName==usr.UserName).FirstOrDefault();
-            if (user == null)
+            bool response = context.Users.Any(u => u.UserName == usr.UserName);
+            if (response == false)
             {
                 context.Users.Add(usr);
                 context.SaveChanges();
