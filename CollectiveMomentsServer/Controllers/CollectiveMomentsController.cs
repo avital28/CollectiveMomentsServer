@@ -26,8 +26,12 @@ namespace CollectiveMomentsServer.Controllers
             user = context.Users.Where((u) => u.Email == usr.Email && u.Passwrd == usr.Passwrd).FirstOrDefault();
             if (user != null)
             { 
-                HttpContext.Session.SetObject("user", user);    
-                return Ok(user);
+                if (user.Passwrd == usr.Passwrd)
+                {
+                    HttpContext.Session.SetObject("user", user);
+                    return Ok(user);
+                }
+                
             }
             return Forbid();
         }
