@@ -21,19 +21,20 @@ namespace CollectiveMomentsServer.Controllers
 
         public async Task<ActionResult<User>> LoginAsync([FromBody] User usr)
         {
+            try { 
             User user = null;
 
-            user = context.Users.Where((u) => u.Email == usr.Email && u.Passwrd == usr.Passwrd).FirstOrDefault();
+            user = context.Users.Where((u) => u.UserName == usr.UserName && u.Passwrd == usr.Passwrd).FirstOrDefault();
             if (user != null)
             { 
-                if (user.Passwrd == usr.Passwrd)
-                {
-                    HttpContext.Session.SetObject("user", user);
+                 HttpContext.Session.SetObject("user", user);
                     return Ok(user);
-                }
-                
             }
-            return Forbid();
+                   return Forbid();
+            }
+            catch(Exception ex) { }
+            return BadRequest();    
+         
         }
 
         [Route("Register")]
@@ -47,13 +48,18 @@ namespace CollectiveMomentsServer.Controllers
                 if (response == false)
                 {
                     context.Users.Add(usr);
-                    context.SaveChanges();
+                  await  context.SaveChangesAsync();
                     return Ok(usr);
                 }
+                return Conflict();
+
             }
-            catch (Exception ex) { }
+            catch (Exception ex)
+            {
+
                 
-            return Forbid();
+            }
+            return BadRequest();    
 
             
         }
