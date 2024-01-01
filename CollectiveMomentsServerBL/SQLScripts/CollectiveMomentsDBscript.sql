@@ -30,6 +30,7 @@ Birthday DATE,
 CONSTRAINT UC_Email UNIQUE(Email)
 
 )
+--
 SET IDENTITY_INSERT [dbo].[Users] ON
 INSERT INTO [dbo].[Users] ([ID], [Email], [FirstName], [LastName], [Passwrd], [UserName], [Birthday]) VALUES (1, N'A', N'A', N'A', N'123', N'A', N'2024-01-01')
 SET IDENTITY_INSERT [dbo].[Users] OFF
