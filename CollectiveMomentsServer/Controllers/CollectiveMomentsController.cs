@@ -74,9 +74,9 @@ namespace CollectiveMomentsServer.Controllers
                 User u = context.Users.Find(usr.Id);
                 if (u != null)
                 {
-                    if(await UpdateUser(u, usr))
+                    if(await UpdateUser1(u, usr))
                     
-                    return Ok(usr);
+                    return Ok(u);
                     return BadRequest();
                 }
                 else
@@ -90,7 +90,7 @@ namespace CollectiveMomentsServer.Controllers
             return BadRequest();
         }
 
-        private async Task<bool>  UpdateUser (User u, UserDto user)
+        private async Task<bool>  UpdateUser1 (User u, UserDto user)
         {
             
                 if (user.Firstname!=null)
