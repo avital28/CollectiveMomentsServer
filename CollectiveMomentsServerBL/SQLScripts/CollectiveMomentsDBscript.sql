@@ -31,6 +31,25 @@ CONSTRAINT UC_Email UNIQUE(Email)
 
 )
 
+Create Table Album (
+
+ID int Identity primary key,
+
+AlbumCover nvarchar(100),
+
+Longitude nvarchar(30),
+
+Latitude nvarchar(30)
+
+)
+CREATE TABLE [dbo].[AlbumMedia]
+(
+	[Id] INT NOT NULL PRIMARY KEY, 
+    [albumid] INT NOT NULL, 
+    [mediaurl] NVARCHAR(250) NULL, 
+    CONSTRAINT [FK_AlbumMedia_ToAlbum] FOREIGN KEY ([albumid]) REFERENCES [Album]([Id])
+)
+
 SET IDENTITY_INSERT [dbo].[Users] ON
 INSERT INTO [dbo].[Users] ([ID], [Email], [FirstName], [LastName], [Passwrd], [UserName], [Birthday]) VALUES (1, N'A', N'A', N'A', N'123', N'A', N'2024-01-01')
 SET IDENTITY_INSERT [dbo].[Users] OFF
