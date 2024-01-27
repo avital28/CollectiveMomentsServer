@@ -105,9 +105,30 @@ namespace CollectiveMomentsServer.Controllers
                     u.UserName = user.Username;
                 try { await context.SaveChangesAsync(); return true; }
             catch (Exception ex) { return false; }    
+        }
 
-            
+        [Route("CreateAlbum")]
+        [HttpPost]
+        public async Task<ActionResult<User>> CreateAlbumAsync([FromBody] User usr)
+        {
+            try
+            {
+                bool response = context.Users.Any(u => u.UserName == usr.UserName);
+                if (response == false)
+                {
+                    context.Users.Add(usr);
+                    await context.SaveChangesAsync();
+                    return Ok(usr);
+                }
+                return Conflict();
 
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+            return BadRequest();
 
 
         }

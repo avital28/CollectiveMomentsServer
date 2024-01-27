@@ -39,7 +39,11 @@ AlbumCover nvarchar(100),
 
 Longitude nvarchar(30),
 
-Latitude nvarchar(30)
+Latitude nvarchar(30),
+
+[userid] INT NOT NULL, 
+CONSTRAINT [FK_Album_ToUsers] FOREIGN KEY ([userid]) REFERENCES [Users]([ID])
+
 
 )
 CREATE TABLE [dbo].[AlbumMedia]
