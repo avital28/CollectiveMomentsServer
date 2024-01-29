@@ -18,4 +18,6 @@ public partial class User
     public string UserName { get; set; } = null!;
 
     public DateTime? Birthday { get; set; }
+
+    public virtual ICollection<Album> Albums { get; set; } = new List<Album>();
 }

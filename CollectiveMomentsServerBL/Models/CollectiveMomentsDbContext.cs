@@ -15,6 +15,10 @@ public partial class CollectiveMomentsDbContext : DbContext
     {
     }
 
+    public virtual DbSet<Album> Albums { get; set; }
+
+    public virtual DbSet<AlbumMedium> AlbumMedia { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -23,9 +27,43 @@ public partial class CollectiveMomentsDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Album>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Album__3214EC27D97EE2EC");
+
+            entity.ToTable("Album");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.AlbumCover).HasMaxLength(100);
+            entity.Property(e => e.Latitude).HasMaxLength(30);
+            entity.Property(e => e.Longitude).HasMaxLength(30);
+            entity.Property(e => e.Userid).HasColumnName("userid");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Albums)
+                .HasForeignKey(d => d.Userid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Album_ToUsers");
+        });
+
+        modelBuilder.Entity<AlbumMedium>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__AlbumMed__3214EC07CDED294E");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Albumid).HasColumnName("albumid");
+            entity.Property(e => e.Mediaurl)
+                .HasMaxLength(250)
+                .HasColumnName("mediaurl");
+
+            entity.HasOne(d => d.Album).WithMany(p => p.AlbumMedia)
+                .HasForeignKey(d => d.Albumid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_AlbumMedia_ToAlbum");
+        });
+
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Users__3214EC27DBEF1217");
+            entity.HasKey(e => e.Id).HasName("PK__Users__3214EC27253FF19E");
 
             entity.HasIndex(e => e.Email, "UC_Email").IsUnique();
 
