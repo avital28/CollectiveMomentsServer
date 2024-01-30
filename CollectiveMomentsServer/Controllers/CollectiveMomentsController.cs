@@ -107,20 +107,21 @@ namespace CollectiveMomentsServer.Controllers
             catch (Exception ex) { return false; }    
         }
 
-        [Route("CreateAlbum")]
+        [Route("GetAlbumsByLocation")]
         [HttpPost]
-        public async Task<ActionResult<User>> CreateAlbumAsync([FromBody] User usr)
+        public async Task<ActionResult<List<Album>>> GetAlbumsByLocationAsync([FromBody] Album album)
         {
             try
             {
-                bool response = context.Users.Any(u => u.UserName == usr.UserName);
-                if (response == false)
+                List<Album> albums = new List<Album>();
+                albums=context.Albums.Where(a=> a.Longitude==album.Longitude && a.Latitude==album.Latitude).ToList();
+                if (albums !=null)
                 {
-                    context.Users.Add(usr);
-                    await context.SaveChangesAsync();
-                    return Ok(usr);
+                    
+                    return Ok(albums);
                 }
-                return Conflict();
+
+                return NotFound();
 
             }
             catch (Exception ex)
@@ -130,6 +131,21 @@ namespace CollectiveMomentsServer.Controllers
             }
             return BadRequest();
 
+
+        }
+
+        [Route("CreateAlbum")]
+        [HttpPost]
+        public async Task<ActionResult<Album>> CreateAlbumAsync([FromBody] Album album)
+        {
+            try
+            {
+              context.Albums.Add(album);
+                await context.SaveChangesAsync();
+                return Ok(album);
+            }
+            catch (Exception ex) { }
+            return BadRequest();
 
         }
     }
