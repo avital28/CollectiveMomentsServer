@@ -12,7 +12,8 @@ namespace ContactsServer
 
             // Add services to the container.
             #region DB Context
-            string connection = builder.Configuration.GetConnectionString("CollectiveMomentsDB");
+            //when working from home "HomeCollectiveMomentsDB" School: "CollectiveMomentsDB"
+            string connection = builder.Configuration.GetConnectionString("HomeCollectiveMomentsDB");
             builder.Services.AddDbContext<CollectiveMomentsDbContext>(options =>options.UseSqlServer(connection));
             #endregion
             #region Json handling

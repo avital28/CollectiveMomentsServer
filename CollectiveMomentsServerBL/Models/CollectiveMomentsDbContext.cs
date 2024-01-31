@@ -21,15 +21,15 @@ public partial class CollectiveMomentsDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost\\sqlexpress;Database=CollectiveMomentsDB;Trusted_Connection=True;TrustServerCertificate=True");
+//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+//        => optionsBuilder.UseSqlServer("Server=localhost\\sqlexpress;Database=CollectiveMomentsDB;Trusted_Connection=True;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Album>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Album__3214EC27D97EE2EC");
+            entity.HasKey(e => e.Id).HasName("PK__Album__3214EC27C8755376");
 
             entity.ToTable("Album");
 
@@ -38,16 +38,11 @@ public partial class CollectiveMomentsDbContext : DbContext
             entity.Property(e => e.Latitude).HasMaxLength(30);
             entity.Property(e => e.Longitude).HasMaxLength(30);
             entity.Property(e => e.Userid).HasColumnName("userid");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Albums)
-                .HasForeignKey(d => d.Userid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Album_ToUsers");
         });
 
         modelBuilder.Entity<AlbumMedium>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__AlbumMed__3214EC07CDED294E");
+            entity.HasKey(e => e.Id).HasName("PK__AlbumMed__3214EC07B0FF2027");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Albumid).HasColumnName("albumid");
@@ -63,12 +58,11 @@ public partial class CollectiveMomentsDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Users__3214EC27253FF19E");
+            entity.HasKey(e => e.Id).HasName("PK__Users__3214EC276017FD5B");
 
             entity.HasIndex(e => e.Email, "UC_Email").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Birthday).HasColumnType("date");
             entity.Property(e => e.Email).HasMaxLength(100);
             entity.Property(e => e.FirstName).HasMaxLength(30);
             entity.Property(e => e.LastName).HasMaxLength(30);

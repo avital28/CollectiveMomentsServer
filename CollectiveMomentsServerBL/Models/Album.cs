@@ -16,6 +16,4 @@ public partial class Album
     public int Userid { get; set; }
 
     public virtual ICollection<AlbumMedium> AlbumMedia { get; set; } = new List<AlbumMedium>();
-
-    public virtual User User { get; set; } = null!;
 }
