@@ -13,7 +13,9 @@ public partial class Album
 
     public string? Latitude { get; set; }
 
-    public int Userid { get; set; }
+    public int AdminId { get; set; }
+
+    public string? AlbumTitle { get; set; }
 
     public virtual ICollection<AlbumMedium> AlbumMedia { get; set; } = new List<AlbumMedium>();
 }

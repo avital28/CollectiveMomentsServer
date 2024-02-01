@@ -41,7 +41,9 @@ Longitude nvarchar(30),
 
 Latitude nvarchar(30),
 
-[userid] INT NOT NULL, 
+AdminID INT NOT NULL, 
+
+AlbumTitle nvarchar(30)
 
 
 
@@ -58,9 +60,7 @@ SET IDENTITY_INSERT [dbo].[Users] ON
 INSERT INTO [dbo].[Users] ([ID], [Email], [FirstName], [LastName], [Passwrd], [UserName]) VALUES (1, N'A', N'A', N'A', N'123', N'A')
 SET IDENTITY_INSERT [dbo].[Users] OFF
 
-SET IDENTITY_INSERT [dbo].[Album] ON
-INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [userid]) VALUES (1, N'A', N'A', N'A', N'123', N'A')
-SET IDENTITY_INSERT [dbo].[Users] OFF
+
 
 Go
 
