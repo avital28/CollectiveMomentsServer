@@ -14,7 +14,7 @@
 
         public string? AlbumTitle { get; set; }
 
-        public List<string> Media {  get; set; }    
+        public List<string> Media { get; set; } = new List<string>();  
 
     }
 }

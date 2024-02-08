@@ -122,7 +122,7 @@ namespace CollectiveMomentsServer.Controllers
                     {
                         Album a= albums.ElementAt(i);
                         AlbumDto dto = await ConvertMedia(a);
-                        albumDtos[i]= new AlbumDto () { AdminId = a.AdminId, AlbumCover=a.AlbumCover, AlbumTitle=a.AlbumTitle, Id=a.Id, Latitude=a.Latitude, Longitude=a.Longitude, Media=dto.Media };
+                        albumDtos.Add( new AlbumDto () { AdminId = a.AdminId, AlbumCover=a.AlbumCover, AlbumTitle=a.AlbumTitle, Id=a.Id, Latitude=a.Latitude, Longitude=a.Longitude, Media=dto.Media });
                     }
                     return Ok(albumDtos);
                 }
