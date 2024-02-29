@@ -156,11 +156,14 @@ namespace CollectiveMomentsServer.Controllers
 
         [Route("CreateAlbum")]
         [HttpPost]
-        public async Task<ActionResult<Album>> CreateAlbumAsync([FromBody] Album album)
+        public async Task<ActionResult<Album>> CreateAlbumAsync([FromBody] IFormFile file, [FromForm] string al)
         {
             try
             {
-              context.Albums.Add(album);
+                Album? album = JsonSerializer.Deserialize<Album>(al);
+                IFormFile f = file;
+                //Album a =  UpdateAlbumCover(f, album)
+              context.Albums.Add(a);
                 await context.SaveChangesAsync();
                 return Ok(album);
             }
@@ -168,7 +171,35 @@ namespace CollectiveMomentsServer.Controllers
             return BadRequest();
 
         }
+
+        public async Task<ActionResult<Album>> UpdateAlbumCover( IFormFile file, Album album)
+        {
+            string cover = $"{album.Id}{Path.GetExtension(file.FileName)}";
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", cover);
+            try
+            {
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
+                album.AlbumCover = cover;
+                context.SaveChanges();
+                return Ok(album);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            return BadRequest();
+        }
+
+            
     }
 
-    
+
+
+}
+
+
+
+    }
+
+
 }
