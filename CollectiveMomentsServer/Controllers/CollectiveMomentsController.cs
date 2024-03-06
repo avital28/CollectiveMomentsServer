@@ -232,7 +232,7 @@ namespace CollectiveMomentsServer.Controllers
             catch (Exception ex)
             {
 
-
+                
             }
             return BadRequest();
 
