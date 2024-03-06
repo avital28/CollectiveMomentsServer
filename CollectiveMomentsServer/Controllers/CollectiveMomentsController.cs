@@ -139,7 +139,7 @@ namespace CollectiveMomentsServer.Controllers
 
 
         }
-
+        
         private async Task<AlbumDto> ConvertMedia (Album album)
         {
             AlbumDto albumDto= new AlbumDto();
@@ -162,9 +162,9 @@ namespace CollectiveMomentsServer.Controllers
             {
                 Album? album = JsonSerializer.Deserialize<Album>(al);
                 IFormFile f = file;
-                //Album a =  UpdateAlbumCover(f, album)
-              context.Albums.Add(a);
+                context.Albums.Add(album);
                 await context.SaveChangesAsync();
+                await UpdateAlbumCover(f, album);
                 return Ok(album);
             }
             catch (Exception ex) { }
@@ -172,7 +172,23 @@ namespace CollectiveMomentsServer.Controllers
 
         }
 
-        public async Task<ActionResult<Album>> UpdateAlbumCover( IFormFile file, Album album)
+        [Route("UpdateAlbumCover")]
+        [HttpPost]
+        public async Task<ActionResult<Album>> UpdateAlbumCover(IFormFile f, Album album)
+        {
+            try
+            {
+                if (await UpdatePath(f, album))
+                {
+                    return Ok(album);
+                }
+                return Unauthorized();
+            }
+            catch (Exception ex) { }    
+            return BadRequest();
+        }
+
+        public async Task<bool> UpdatePath( IFormFile file, Album album)
         {
             string cover = $"{album.Id}{Path.GetExtension(file.FileName)}";
             string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", cover);
@@ -184,13 +200,47 @@ namespace CollectiveMomentsServer.Controllers
                 }
                 album.AlbumCover = cover;
                 context.SaveChanges();
-                return Ok(album);
+                return true;
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
-            return BadRequest();
+            return false;
         }
 
-            
+        [Route("GetAlbumsByUser")]
+        [HttpPost]
+        public async Task<ActionResult<List<AlbumDto>>> GetAlbumsByUserAsync([FromBody] User user)
+        {
+            try
+            {
+                List<Album> albums = new List<Album>();
+                albums = context.Albums.Where(u => u.AdminId==user.Id).ToList();
+                if (albums != null)
+                {
+                    List<AlbumDto> albumDtos = new List<AlbumDto>();
+                    for (int i = 0; i < albums.Count; i++)
+                    {
+                        Album a = albums.ElementAt(i);
+                        AlbumDto dto = await ConvertMedia(a);
+                        albumDtos.Add(new AlbumDto() { AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Id = a.Id, Latitude = a.Latitude, Longitude = a.Longitude, Media = dto.Media });
+                    }
+                    return Ok(albumDtos);
+                }
+
+                return NotFound();
+
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+            return BadRequest();
+
+
+        }
+
+
+
     }
 
 
@@ -199,7 +249,7 @@ namespace CollectiveMomentsServer.Controllers
 
 
 
-    }
 
 
-}
+
+
