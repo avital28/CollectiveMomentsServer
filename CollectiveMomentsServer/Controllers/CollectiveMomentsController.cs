@@ -164,7 +164,7 @@ namespace CollectiveMomentsServer.Controllers
                 IFormFile f = file;
                 context.Albums.Add(album);
                 await context.SaveChangesAsync();
-                await UpdateAlbumCover(f, album);
+                //await UpdatePath(f, album);
                 return Ok(album);
             }
             catch (Exception ex) { }
@@ -172,23 +172,23 @@ namespace CollectiveMomentsServer.Controllers
 
         }
 
-        [Route("UpdateAlbumCover")]
-        [HttpPost]
-        public async Task<ActionResult<Album>> UpdateAlbumCover(IFormFile f, Album album)
-        {
-            try
-            {
-                if (await UpdatePath(f, album))
-                {
-                    return Ok(album);
-                }
-                return Unauthorized();
-            }
-            catch (Exception ex) { }    
-            return BadRequest();
-        }
+        //[Route("UpdateAlbumCover")]
+        //[HttpPost]
+        //public async Task<ActionResult<Album>> UpdateAlbumCover([FromBody] IFormFile f, Album album)
+        //{
+        //    try
+        //    {
+        //        if (await UpdatePath(f, album))
+        //        {
+        //            return Ok(album);
+        //        }
+        //        return Unauthorized();
+        //    }
+        //    catch (Exception ex) { }
+        //    return BadRequest();
+        //}
 
-        public async Task<bool> UpdatePath( IFormFile file, Album album)
+        private async Task<bool> UpdatePath(IFormFile file, Album album)
         {
             string cover = $"{album.Id}{Path.GetExtension(file.FileName)}";
             string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", cover);
@@ -199,7 +199,7 @@ namespace CollectiveMomentsServer.Controllers
                     file.CopyTo(fileStream);
                 }
                 album.AlbumCover = cover;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
