@@ -156,16 +156,16 @@ namespace CollectiveMomentsServer.Controllers
 
         [Route("CreateAlbum")]
         [HttpPost]
-        public async Task<ActionResult<Album>> CreateAlbumAsync([FromBody] IFormFile file, [FromForm] string al)
+        public async Task<ActionResult<Album>> CreateAlbumAsync( IFormFile file, [FromForm] string album)
         {
             try
             {
-                Album? album = JsonSerializer.Deserialize<Album>(al);
+                Album? filealbum = JsonSerializer.Deserialize<Album>(album);
                 IFormFile f = file;
-                context.Albums.Add(album);
+                context.Albums.Add(filealbum) ;
                 await context.SaveChangesAsync();
-                //await UpdatePath(f, album);
-                return Ok(album);
+                await UpdatePath(f, filealbum);
+                return Ok(filealbum);
             }
             catch (Exception ex) { }
             return BadRequest();
