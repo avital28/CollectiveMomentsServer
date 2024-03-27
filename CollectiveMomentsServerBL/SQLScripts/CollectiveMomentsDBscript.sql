@@ -31,23 +31,19 @@ CONSTRAINT UC_Email UNIQUE(Email)
 
 )
 
-Create Table Album (
-
-ID int Identity primary key,
-
-AlbumCover nvarchar(100),
-
-Longitude nvarchar(30),
-
-Latitude nvarchar(30),
-
-AdminID INT NOT NULL, 
-
-AlbumTitle nvarchar(30)
+CREATE TABLE [dbo].[Album] (
+    [ID]         INT            IDENTITY (1, 1) NOT NULL,
+    [AlbumCover] NVARCHAR (100) NULL,
+    [Longitude]  NVARCHAR (30)  NULL,
+    [Latitude]   NVARCHAR (30)  NULL,
+    [AdminID]    INT            NOT NULL,
+    
+    [AlbumTitle] NVARCHAR (30)  NULL, 
+    PRIMARY KEY CLUSTERED ([ID] ASC), 
+   
+);
 
 
-
-)
 CREATE TABLE [dbo].[AlbumMedia]
 (
 	[Id] INT NOT NULL PRIMARY KEY, 
@@ -56,6 +52,15 @@ CREATE TABLE [dbo].[AlbumMedia]
     CONSTRAINT [FK_AlbumMedia_ToAlbum] FOREIGN KEY ([albumid]) REFERENCES [Album]([Id])
 )
 
+CREATE TABLE [dbo].[Members]
+(
+	[Id] INT NOT NULL , 
+    [AlbumID] INT NULL, 
+    [UserID] INT  NULL, 
+    CONSTRAINT [FK_UsersAlbum_User] FOREIGN KEY ([UserID]) REFERENCES [Users]([ID]), 
+    CONSTRAINT [FK_UsersAlbum_Album] FOREIGN KEY (AlbumID) REFERENCES [Album](ID), 
+    PRIMARY KEY ([Id])
+)
 SET IDENTITY_INSERT [dbo].[Users] ON
 INSERT INTO [dbo].[Users] ([ID], [Email], [FirstName], [LastName], [Passwrd], [UserName]) VALUES (1, N'A', N'A', N'A', N'123', N'A')
 SET IDENTITY_INSERT [dbo].[Users] OFF

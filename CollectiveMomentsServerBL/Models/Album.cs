@@ -18,4 +18,6 @@ public partial class Album
     public string? AlbumTitle { get; set; }
 
     public virtual ICollection<AlbumMedium> AlbumMedia { get; set; } = new List<AlbumMedium>();
+
+    public virtual ICollection<Members> Members { get; set; } = new List<Members>();
 }
