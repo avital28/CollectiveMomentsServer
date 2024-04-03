@@ -1,4 +1,6 @@
-﻿namespace CollectiveMomentsServer.DTO_Models
+﻿using CollectiveMomentsServerBL.Models;
+
+namespace CollectiveMomentsServer.DTO_Models
 {
     public class AlbumDto
     {
@@ -14,7 +16,7 @@
 
         public string? AlbumTitle { get; set; }
 
-        public List<string> Media { get; set; } = new List<string>();  
+        public List<MediaItem> Media { get; set; } = new List<MediaItem>();  
 
     }
 }

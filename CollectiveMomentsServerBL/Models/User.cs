@@ -17,5 +17,7 @@ public partial class User
 
     public string UserName { get; set; } = null!;
 
-    public virtual ICollection<Members> UsersAlbums { get; set; } = new List<Members>();
+    public string? ProfilePicture { get; set; }
+
+    public virtual ICollection<Member> Members { get; set; } = new List<Member>();
 }

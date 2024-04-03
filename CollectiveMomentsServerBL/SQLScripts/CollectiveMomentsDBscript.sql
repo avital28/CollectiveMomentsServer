@@ -23,14 +23,24 @@ LastName nvarchar(30),
 Passwrd nvarchar(30) Not null,
 
 UserName nvarchar(30) Not null,
-
+ProfilePicture nvarchar(30),
 
 
 
 CONSTRAINT UC_Email UNIQUE(Email)
 
 )
+Create Table Media (
 
+ID int Identity primary key,
+
+Sources nvarchar(100),
+
+IsImage bit,
+
+IsVideo bit,
+
+)
 CREATE TABLE [dbo].[Album] (
     [ID]         INT            IDENTITY (1, 1) NOT NULL,
     [AlbumCover] NVARCHAR (100) NULL,
@@ -43,7 +53,15 @@ CREATE TABLE [dbo].[Album] (
    
 );
 
-
+CREATE TABLE [dbo].[MediaItem]
+(
+	[Id] INT NOT NULL , 
+    [AlbumID] INT NULL, 
+    [MediaID] INT  NULL, 
+    CONSTRAINT [FK_MediaItem_Media] FOREIGN KEY ([MediaID]) REFERENCES [Media]([ID]), 
+    CONSTRAINT [FK_MediaItem_Album] FOREIGN KEY (AlbumID) REFERENCES [Album](ID), 
+    PRIMARY KEY ([Id])
+)
 CREATE TABLE [dbo].[AlbumMedia]
 (
 	[Id] INT NOT NULL PRIMARY KEY, 
@@ -64,6 +82,7 @@ CREATE TABLE [dbo].[Members]
 SET IDENTITY_INSERT [dbo].[Users] ON
 INSERT INTO [dbo].[Users] ([ID], [Email], [FirstName], [LastName], [Passwrd], [UserName]) VALUES (1, N'A', N'A', N'A', N'123', N'A')
 SET IDENTITY_INSERT [dbo].[Users] OFF
+
 
 
 

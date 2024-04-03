@@ -147,8 +147,8 @@ namespace CollectiveMomentsServer.Controllers
             {
                 for (int i = 0; i < album.AlbumMedia.Count; i++)
                 {
-                    AlbumMedium a = album.AlbumMedia.ElementAt(i);
-                    albumDto.Media.Add(a.Mediaurl);
+                    MediaItem a = album.MediaItems.ElementAt(i);
+                    albumDto.Media.Add(new MediaItem() { });
                 }
             }
             return albumDto;    
