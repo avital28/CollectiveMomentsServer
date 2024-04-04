@@ -21,5 +21,5 @@ public partial class Album
 
     public virtual ICollection<MediaItem> MediaItems { get; set; } = new List<MediaItem>();
 
-    public virtual ICollection<Member> Members { get; set; } = new List<Member>();
+    public virtual ICollection<Members> Members { get; set; } = new List<Members>();
 }
