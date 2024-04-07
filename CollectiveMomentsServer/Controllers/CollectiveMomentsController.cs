@@ -238,6 +238,52 @@ namespace CollectiveMomentsServer.Controllers
 
 
         }
+        [Route("UploadMedia")]
+        [HttpPost]
+        public async Task<ActionResult<AlbumDto>> UploadMediaAsync(IFormFile file, [FromForm] string album, [FromForm] string photo)
+        {
+            try
+            {
+                Album? filealbum = JsonSerializer.Deserialize<Album>(album);
+                IFormFile f = file;
+                Album a = context.Albums.Find(filealbum.Id);
+                if (a != null)
+                {
+                    AlbumDto alb = new AlbumDto() { Id = a.Id, AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Latitude = a.Latitude, Longitude = a.Longitude };
+                    Medium? media = JsonSerializer.Deserialize<Medium>(photo);
+                    bool IsUpdated=await UpdateMediaPath(file,media, alb);
+                    if (IsUpdated==true) 
+                    {
+                        await context.SaveChangesAsync();
+
+                        return Ok(alb);
+                    }
+                }
+            }
+            catch (Exception ex) { }
+            return BadRequest();
+
+        }
+        private async Task<bool> UpdateMediaPath(IFormFile file, Medium media, AlbumDto album)
+        {
+            string mediapath = $"{media.Id}{Path.GetExtension(file.FileName)}";
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", mediapath);
+            try
+            {
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
+                
+                media.Sources = mediapath;
+                album.Media.Add(media); 
+                await context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            return false;
+        }
+
 
 
 

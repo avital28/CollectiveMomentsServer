@@ -23,7 +23,7 @@ public partial class CollectiveMomentsDbContext : DbContext
 
     public virtual DbSet<Medium> Media { get; set; }
 
-    public virtual DbSet<Member> Members { get; set; }
+    public virtual DbSet<Members> Members { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -90,7 +90,7 @@ public partial class CollectiveMomentsDbContext : DbContext
             entity.Property(e => e.Sources).HasMaxLength(100);
         });
 
-        modelBuilder.Entity<Member>(entity =>
+        modelBuilder.Entity<Members>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Members__3214EC07B08810C5");
 
