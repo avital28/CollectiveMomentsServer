@@ -83,6 +83,14 @@ SET IDENTITY_INSERT [dbo].[Users] ON
 INSERT INTO [dbo].[Users] ([ID], [Email], [FirstName], [LastName], [Passwrd], [UserName]) VALUES (1, N'A', N'A', N'A', N'123', N'A')
 SET IDENTITY_INSERT [dbo].[Users] OFF
 
+SET IDENTITY_INSERT [dbo].[Album] ON
+INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle]) VALUES (1, N'cover1.jpg', N'-122.084', N'37.421998333333335', 1, NULL)
+INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle]) VALUES (2, N'cover2.jpg', N'-122.084', N'37.421998333333335', 1, NULL)
+INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle]) VALUES (3, N'cover3.jpg', N'-122.084', N'37.421998333333335', 1, NULL)
+INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle]) VALUES (4, N'cover4.jpg', N'-122.084', N'37.421998333333335', 1, NULL)
+
+SET IDENTITY_INSERT [dbo].[Album] OFF
+
 
 
 

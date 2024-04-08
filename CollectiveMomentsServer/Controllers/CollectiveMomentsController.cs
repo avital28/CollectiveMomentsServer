@@ -249,7 +249,8 @@ namespace CollectiveMomentsServer.Controllers
                 Album a = context.Albums.Find(filealbum.Id);
                 if (a != null)
                 {
-                    AlbumDto alb = new AlbumDto() { Id = a.Id, AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Latitude = a.Latitude, Longitude = a.Longitude };
+                    AlbumDto dto= await ConvertMedia(a);
+                    AlbumDto alb = new AlbumDto() { Id = a.Id, AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Latitude = a.Latitude, Longitude = a.Longitude, Media=dto.Media };
                     Medium? media = JsonSerializer.Deserialize<Medium>(photo);
                     bool IsUpdated=await UpdateMediaPath(file,media, alb);
                     if (IsUpdated==true) 
