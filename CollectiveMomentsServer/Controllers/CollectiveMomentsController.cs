@@ -252,8 +252,8 @@ namespace CollectiveMomentsServer.Controllers
                     AlbumDto dto= await ConvertMedia(a);
                     AlbumDto alb = new AlbumDto() { Id = a.Id, AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Latitude = a.Latitude, Longitude = a.Longitude, Media=dto.Media };
                     Medium? media = JsonSerializer.Deserialize<Medium>(photo);
-                    bool IsUpdated=await UpdateMediaPath(file,media, alb);
-                    if (IsUpdated==true) 
+                    bool IsUpdated = await UpdateMediaPath(file, media, alb);
+                    if (IsUpdated == true)
                     {
                         await context.SaveChangesAsync();
 
@@ -284,6 +284,29 @@ namespace CollectiveMomentsServer.Controllers
             catch (Exception ex) { Console.WriteLine(ex.Message); }
             return false;
         }
+
+        //[Route("GetMediaByAlbum")]
+        //[HttpPost]
+        //public async Task<ActionResult<List<Medium>>> GetMediaByAlbumAsync([FromBody]Album album)
+        //{
+        //    try
+        //    {
+        //        Album a = context.Albums.Find(album.Id);
+        //        if (a != null && a.AlbumMedia.Count!=null)
+        //        {
+        //            List<Medium> albummedia = new List<Medium>();
+        //            for (int i = 0; i < a.AlbumMedia.Count; i++)
+        //            {
+        //                Album a = albums.ElementAt(i);
+        //                AlbumDto dto = await ConvertMedia(a);
+        //                albumDtos.Add(new AlbumDto() { AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Id = a.Id, Latitude = a.Latitude, Longitude = a.Longitude, Media = dto.Media });
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex) { }
+        //    return BadRequest();
+
+        //}
 
 
 
