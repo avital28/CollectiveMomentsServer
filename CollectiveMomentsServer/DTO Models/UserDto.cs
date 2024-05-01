@@ -9,5 +9,6 @@
         public string? Passwrd { get; set; }
         public string? Email { get; set; }
         public DateTime? Birthday { get; set; }
+        public string ProfilePicture { get; set; }  
     }
 }

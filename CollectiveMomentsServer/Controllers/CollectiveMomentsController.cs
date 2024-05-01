@@ -103,7 +103,9 @@ namespace CollectiveMomentsServer.Controllers
                     u.Email = user.Email;
                 if (user.Username != null)
                     u.UserName = user.Username;
-                try { await context.SaveChangesAsync(); return true; }
+            if (user.ProfilePicture != null)
+                u.ProfilePicture = user.ProfilePicture;
+            try { await context.SaveChangesAsync(); return true; }
             catch (Exception ex) { return false; }    
         }
 
