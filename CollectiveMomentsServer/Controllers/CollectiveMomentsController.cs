@@ -293,14 +293,14 @@ namespace CollectiveMomentsServer.Controllers
 
         //}
         [Route("GetAlbumsByUser")]
-        [HttpPost]
-        public async Task<ActionResult<List<AlbumDto>>> GetAlbumsByUserAsync([FromBody] User user)
+        [HttpGet]
+        public async Task<ActionResult<List<AlbumDto>>> GetAlbumsByUserAsync([FromQuery] int userId)
         {
             try
             {
-                List<Album> albums = new List<Album>();
+                
                 List<AlbumDto> albumdtos = new List<AlbumDto>();
-                albums = context.Albums.Where( u=> u.AdminId==user.Id||( context.Members.FirstOrDefault(m => m.UserId==user.Id)!=null) ).ToList(); 
+                var albums = context.Albums.Where( al=> al.AdminId==userId|| al.Members.Any(mm=>mm.UserId==userId)); 
 
                 if (albums != null)
                 {
@@ -330,16 +330,16 @@ namespace CollectiveMomentsServer.Controllers
         }
         [Route("GetMediaByAlbum")]
         [HttpPost]
-        public async Task<ActionResult<List<Medium>>> GetMediaByAlbumAsync([FromBody] Album album)
+        public async Task<ActionResult<List<Medium>>> GetMediaByAlbumAsync([FromQuery] int albumId)
         {
             try
             {
                
-                var media = context.MediaItems.Where(m=> m.AlbumId == album.Id ).ToList();
+                var media = context.MediaItems.Where(m=> m.AlbumId == albumId).ToList();
                 List<Medium> media1 = new List<Medium>();
                 if (media != null)
                 {
-                    var items = context.MediaItems.Where(m => m.AlbumId == album.Id).ToList();
+                    var items = context.MediaItems.Where(m => m.AlbumId == albumId).ToList();
 
                     foreach (var m in media)
                     {
