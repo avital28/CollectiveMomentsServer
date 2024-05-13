@@ -23,7 +23,7 @@ public partial class CollectiveMomentsDbContext : DbContext
 
     public virtual DbSet<Medium> Media { get; set; }
 
-    public virtual DbSet<Members> Members { get; set; }
+    public virtual DbSet<Member> Members { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -35,7 +35,7 @@ public partial class CollectiveMomentsDbContext : DbContext
     {
         modelBuilder.Entity<Album>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Album__3214EC278EA897D9");
+            entity.HasKey(e => e.Id).HasName("PK__Album__3214EC27164D3B8C");
 
             entity.ToTable("Album");
 
@@ -49,9 +49,11 @@ public partial class CollectiveMomentsDbContext : DbContext
 
         modelBuilder.Entity<AlbumMedium>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__AlbumMed__3214EC070E72BBFF");
+            entity.HasKey(e => e.Id).HasName("PK__AlbumMed__3214EC27BE31147B");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("ID");
             entity.Property(e => e.Albumid).HasColumnName("albumid");
             entity.Property(e => e.Mediaurl)
                 .HasMaxLength(250)
@@ -65,7 +67,7 @@ public partial class CollectiveMomentsDbContext : DbContext
 
         modelBuilder.Entity<MediaItem>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__MediaIte__3214EC073A65E153");
+            entity.HasKey(e => e.Id).HasName("PK__MediaIte__3214EC07FEF5C08B");
 
             entity.ToTable("MediaItem");
 
@@ -84,17 +86,19 @@ public partial class CollectiveMomentsDbContext : DbContext
 
         modelBuilder.Entity<Medium>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Media__3214EC27CD61E2B8");
+            entity.HasKey(e => e.Id).HasName("PK__Media__3214EC27B6B5F847");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Sources).HasMaxLength(100);
         });
 
-        modelBuilder.Entity<Members>(entity =>
+        modelBuilder.Entity<Member>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Members__3214EC07B08810C5");
+            entity.HasKey(e => e.Id).HasName("PK__Members__3214EC2769445E12");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("ID");
             entity.Property(e => e.AlbumId).HasColumnName("AlbumID");
             entity.Property(e => e.UserId).HasColumnName("UserID");
 
@@ -109,7 +113,7 @@ public partial class CollectiveMomentsDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Users__3214EC276E82DA2E");
+            entity.HasKey(e => e.Id).HasName("PK__Users__3214EC27C6B5B4B2");
 
             entity.HasIndex(e => e.Email, "UC_Email").IsUnique();
 

@@ -156,6 +156,20 @@ namespace CollectiveMomentsServer.Controllers
             return albumDto;    
         }
 
+        private async Task<AlbumDto> ConvertMembers(Album album)
+        {
+            AlbumDto albumDto = new AlbumDto();
+            if (album.Members != null)
+            {
+                for (int i = 0; i < album.AlbumMedia.Count; i++)
+                {
+                    User u = album.Members.ElementAt(i).User;
+                    albumDto.Members.Add(u);
+                }
+            }
+            return albumDto;
+        }
+
         [Route("CreateAlbum")]
         [HttpPost]
         public async Task<ActionResult<Album>> CreateAlbumAsync( IFormFile file, [FromForm] string album)
@@ -208,6 +222,76 @@ namespace CollectiveMomentsServer.Controllers
             return false;
         }
 
+        //[Route("GetAlbumsByAdmin")]
+        //[HttpPost]
+        //public async Task<ActionResult<List<AlbumDto>>> GetAlbumsByAdminAsync([FromBody] User user)
+        //{
+        //    try
+        //    {
+        //        List<Album> albums = new List<Album>();
+        //        albums = context.Albums.Where(u => u.AdminId==user.Id).ToList();
+        //        if (albums != null)
+        //        {
+        //            List<AlbumDto> albumDtos = new List<AlbumDto>();
+        //            for (int i = 0; i < albums.Count; i++)
+        //            {
+        //                Album a = albums.ElementAt(i);
+        //                AlbumDto dto = await ConvertMedia(a);
+        //                AlbumDto dto2 = await ConvertMembers(a);
+        //                albumDtos.Add(new AlbumDto() { AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Id = a.Id, Latitude = a.Latitude, Longitude = a.Longitude, Media = dto.Media, Members=dto2.Members });
+        //            }
+        //            return Ok(albumDtos);
+        //        }
+
+        //        return NotFound();
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+                
+        //    }
+        //    return BadRequest();
+
+
+        //}
+
+        //[Route("GetAlbumsByMembers")]
+        //[HttpPost]
+        //public async Task<ActionResult<List<AlbumDto>>> GetAlbumsByMembersAsync([FromBody] User user)
+        //{
+        //    try
+        //    {
+        //        List<Album> albums = new List<Album>();
+        //        List<AlbumDto> albumdtos = new List<AlbumDto>();
+        //        albums = context.Albums.Where(u => u.AdminId != user.Id || (context.Members.FirstOrDefault(m => m.UserId == user.Id)) != null).ToList();
+
+        //        if (albums != null)
+        //        {
+        //            foreach (Album a in albums)
+        //            {
+        //                AlbumDto dto = await ConvertMembers(a);
+        //                 AlbumDto dto2 = await ConvertMedia(a);
+        //                albumdtos.Add((new AlbumDto() { AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Id = a.Id, Latitude = a.Latitude, Longitude = a.Longitude, Media = dto2.Media, Members = dto.Members }));
+                            
+        //             }
+        //            return Ok(albumdtos);
+        //        }
+                    
+
+                
+        //        return NotFound();
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+
+        //    }
+        //    return BadRequest();
+
+
+        //}
         [Route("GetAlbumsByUser")]
         [HttpPost]
         public async Task<ActionResult<List<AlbumDto>>> GetAlbumsByUserAsync([FromBody] User user)
@@ -215,26 +299,66 @@ namespace CollectiveMomentsServer.Controllers
             try
             {
                 List<Album> albums = new List<Album>();
-                albums = context.Albums.Where(u => u.AdminId==user.Id).ToList();
+                List<AlbumDto> albumdtos = new List<AlbumDto>();
+                albums = context.Albums.Where( u=> u.AdminId==user.Id||( context.Members.FirstOrDefault(m => m.UserId==user.Id)!=null) ).ToList(); 
+
                 if (albums != null)
                 {
-                    List<AlbumDto> albumDtos = new List<AlbumDto>();
-                    for (int i = 0; i < albums.Count; i++)
+                    foreach (Album a in albums)
                     {
-                        Album a = albums.ElementAt(i);
-                        AlbumDto dto = await ConvertMedia(a);
-                        albumDtos.Add(new AlbumDto() { AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Id = a.Id, Latitude = a.Latitude, Longitude = a.Longitude, Media = dto.Media });
-                    }
-                    return Ok(albumDtos);
+                        AlbumDto dto = await ConvertMembers(a);
+                        AlbumDto dto2 = await ConvertMedia(a);
+                       albumdtos.Add((new AlbumDto() { AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Id = a.Id, Latitude = a.Latitude, Longitude = a.Longitude, Media = dto2.Media, Members = dto.Members }));
+                      }
+                    return Ok(albumdtos);
                 }
 
                 return NotFound();
+
+            
+                
 
             }
             catch (Exception ex)
             {
 
-                
+
+            }
+            return BadRequest();
+
+
+        }
+        [Route("GetMediaByAlbum")]
+        [HttpPost]
+        public async Task<ActionResult<List<Medium>>> GetMediaByAlbumAsync([FromBody] Album album)
+        {
+            try
+            {
+               
+                var media = context.MediaItems.Where(m=> m.AlbumId == album.Id ).ToList();
+                List<Medium> media1 = new List<Medium>();
+                if (media != null)
+                {
+                    var items = context.MediaItems.Where(m => m.AlbumId == album.Id).ToList();
+
+                    foreach (var m in media)
+                    {
+                        media1.Add(m.Media);
+                        
+                    }
+                    return Ok(media1);
+                }
+
+                return NotFound();
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+
             }
             return BadRequest();
 
