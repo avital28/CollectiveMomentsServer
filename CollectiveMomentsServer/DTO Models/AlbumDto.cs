@@ -16,6 +16,8 @@ namespace CollectiveMomentsServer.DTO_Models
 
         public string? AlbumTitle { get; set; }
 
+        public int? MediaCount { get; set; }
+
         public List<Medium> Media { get; set; } = new List<Medium>();
         public List<User> Members { get; set; } = new List<User>();
 

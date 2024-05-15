@@ -109,38 +109,38 @@ namespace CollectiveMomentsServer.Controllers
             catch (Exception ex) { return false; }    
         }
 
-        [Route("GetAlbumsByLocation")]
-        [HttpPost]
-        public async Task<ActionResult<List<AlbumDto>>> GetAlbumsByLocationAsync([FromBody] Album album)
-        {
-            try
-            {
-                List<Album> albums = new List<Album>();
-                albums=context.Albums.Where(a=> a.Longitude==album.Longitude && a.Latitude==album.Latitude).ToList();
-                if (albums !=null)
-                {
-                    List<AlbumDto> albumDtos = new List<AlbumDto>();
-                    for (int i = 0; i < albums.Count; i++)
-                    {
-                        Album a= albums.ElementAt(i);
-                        AlbumDto dto = await ConvertMedia(a);
-                        albumDtos.Add( new AlbumDto () { AdminId = a.AdminId, AlbumCover=a.AlbumCover, AlbumTitle=a.AlbumTitle, Id=a.Id, Latitude=a.Latitude, Longitude=a.Longitude, Media=dto.Media });
-                    }
-                    return Ok(albumDtos);
-                }
+        //[Route("GetAlbumsByLocation")]
+        //[HttpGet]
+        //public async Task<ActionResult<List<AlbumDto>>> GetAlbumsByLocationAsync([FromQuery] string Latitude, string Longtitude)
+        //{
+        //    try
+        //    {
+        //        List<Album> albums = new List<Album>();
+        //        albums=context.Albums.Where(a=> a.Longitude==album.Longitude && a.Latitude==album.Latitude).ToList();
+        //        if (albums !=null)
+        //        {
+        //            List<AlbumDto> albumDtos = new List<AlbumDto>();
+        //            for (int i = 0; i < albums.Count; i++)
+        //            {
+        //                Album a= albums.ElementAt(i);
+        //                AlbumDto dto = await ConvertMedia(a);
+        //                albumDtos.Add( new AlbumDto () { AdminId = a.AdminId, AlbumCover=a.AlbumCover, AlbumTitle=a.AlbumTitle, Id=a.Id, Latitude=a.Latitude, Longitude=a.Longitude, Media=dto.Media });
+        //            }
+        //            return Ok(albumDtos);
+        //        }
 
-                return NotFound();
+        //        return NotFound();
 
-            }
-            catch (Exception ex)
-            {
-
-
-            }
-            return BadRequest();
+        //    }
+        //    catch (Exception ex)
+        //    {
 
 
-        }
+        //    }
+        //    return BadRequest();
+
+
+        //}
         
         private async Task<AlbumDto> ConvertMedia (Album album)
         {
@@ -308,7 +308,7 @@ namespace CollectiveMomentsServer.Controllers
                     {
                         AlbumDto dto = await ConvertMembers(a);
                         AlbumDto dto2 = await ConvertMedia(a);
-                       albumdtos.Add((new AlbumDto() { AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Id = a.Id, Latitude = a.Latitude, Longitude = a.Longitude, Media = dto2.Media, Members = dto.Members }));
+                       albumdtos.Add((new AlbumDto() { AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Id = a.Id, Latitude = a.Latitude, Longitude = a.Longitude, Media = dto2.Media, Members = dto.Members, MediaCount=a.MediaCount }));
                       }
                     return Ok(albumdtos);
                 }
@@ -329,7 +329,7 @@ namespace CollectiveMomentsServer.Controllers
 
         }
         [Route("GetMediaByAlbum")]
-        [HttpPost]
+        [HttpGet]
         public async Task<ActionResult<List<Medium>>> GetMediaByAlbumAsync([FromQuery] int albumId)
         {
             try
@@ -411,28 +411,7 @@ namespace CollectiveMomentsServer.Controllers
             return false;
         }
 
-        //[Route("GetMediaByAlbum")]
-        //[HttpPost]
-        //public async Task<ActionResult<List<Medium>>> GetMediaByAlbumAsync([FromBody]Album album)
-        //{
-        //    try
-        //    {
-        //        Album a = context.Albums.Find(album.Id);
-        //        if (a != null && a.AlbumMedia.Count!=null)
-        //        {
-        //            List<Medium> albummedia = new List<Medium>();
-        //            for (int i = 0; i < a.AlbumMedia.Count; i++)
-        //            {
-        //                Album a = albums.ElementAt(i);
-        //                AlbumDto dto = await ConvertMedia(a);
-        //                albumDtos.Add(new AlbumDto() { AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Id = a.Id, Latitude = a.Latitude, Longitude = a.Longitude, Media = dto.Media });
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex) { }
-        //    return BadRequest();
-
-        //}
+       
 
 
 

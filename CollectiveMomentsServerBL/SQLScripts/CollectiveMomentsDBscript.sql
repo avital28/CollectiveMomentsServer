@@ -84,15 +84,15 @@ INSERT INTO [dbo].[Users] ([ID], [Email], [FirstName], [LastName], [Passwrd], [U
 SET IDENTITY_INSERT [dbo].[Users] OFF
 
 SET IDENTITY_INSERT [dbo].[Album] ON
-INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle]) VALUES (1, N'cover1.jpg', N'-122.084', N'37.421998333333335', 1, NULL)
-INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle]) VALUES (2, N'cover2.jpg', N'-122.084', N'37.421998333333335', 1, NULL)
-INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle]) VALUES (3, N'cover3.jpg', N'-122.084', N'37.421998333333335', 1, N'Album 2')
-INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle]) VALUES (4, N'cover4.jpg', N'-122.084', N'37.421998333333335', 2, N'Album 1')
-INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle],[MediaCount]) VALUES (5, N'cover6.jpg', N'-234.084', N'54.921998333333335', 1, N'Concert',4)
-INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle]) VALUES (6, N'cover4.jpg', N'-234.084', N'54.921998333333335', 2, N'Album 2')
-INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle]) VALUES (7, N'cover4.jpg', N'-234.084', N'54.921998333333335', 2, N'Album 3')
-INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle]) VALUES (8, N'cover4.jpg', N'-234.084', N'54.921998333333335', 2, N'Album 4')
-INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle]) VALUES (9, N'cover4.jpg', N'-234.084', N'54.921998333333335', 2, N'Album 5')
+INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle] ,[MediaCount]) VALUES (1, N'cover1.jpg', N'-122.084', N'37.421998333333335', 1, NULL, 0)
+INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle] ,[MediaCount]) VALUES (2, N'cover2.jpg', N'-122.084', N'37.421998333333335', 1, NULL, 0)
+INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle] ,[MediaCount]) VALUES (3, N'picniccover.jpg', N'-122.084', N'37.421998333333335', 1, N'Picnic', 0)
+INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle] ,[MediaCount]) VALUES (4, N'cover4.jpg', N'-122.084', N'37.421998333333335', 2, N'Album 1', 0)
+INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle],[MediaCount]) VALUES (5, N'taylorconcertcover.jpg', N'-234.084', N'54.921998333333335', 1, N'The eras tour',4)
+INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle] ,[MediaCount]) VALUES (6, N'cover4.jpg', N'-234.084', N'54.921998333333335', 2, N'Album 2', 0)
+INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle] ,[MediaCount]) VALUES (7, N'cover4.jpg', N'-234.084', N'54.921998333333335', 2, N'Album 3',0)
+INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle] ,[MediaCount]) VALUES (8, N'cover4.jpg', N'-234.084', N'54.921998333333335', 2, N'Album 4',0)
+INSERT INTO [dbo].[Album] ([ID], [AlbumCover], [Longitude], [Latitude], [AdminID], [AlbumTitle] ,[MediaCount]) VALUES (9, N'cover4.jpg', N'-234.084', N'54.921998333333335', 2, N'Album 5',0)
 
 
 SET IDENTITY_INSERT [dbo].[Album] OFF
