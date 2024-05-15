@@ -313,7 +313,7 @@ namespace CollectiveMomentsServer.Controllers
                     return Ok(albumdtos);
                 }
 
-                return NotFound();
+                //return NotFound();
 
             
                 
