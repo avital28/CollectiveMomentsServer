@@ -411,8 +411,27 @@ namespace CollectiveMomentsServer.Controllers
             return false;
         }
 
-       
 
+        [Route("UpdateAlbumCover")]
+        [HttpPost]
+        public async Task<ActionResult<string>> UpdateAlbumCoverAsync(IFormFile file, [FromForm] string album)
+        {
+            try
+            {
+                Album? filealbum = JsonSerializer.Deserialize<Album>(album);
+                IFormFile f = file;
+                Album a = context.Albums.Find(filealbum.Id);
+                if (a != null)
+                {
+                    await UpdatePath(f, a);
+                   return Ok(a.AlbumCover);
+                }
+                
+            }
+            catch (Exception ex) { }
+            return BadRequest();
+
+        }
 
 
 
