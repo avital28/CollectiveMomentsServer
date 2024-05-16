@@ -2,6 +2,7 @@
 using CollectiveMomentsServerBL.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
 namespace CollectiveMomentsServer.Controllers
@@ -110,40 +111,46 @@ namespace CollectiveMomentsServer.Controllers
             catch (Exception ex) { return false; }
         }
 
-        //[Route("GetAlbumsByLocation")]
-        //[HttpGet]
-        //public async Task<ActionResult<List<AlbumDto>>> GetAlbumsByLocationAsync([FromQuery] string Latitude, string Longtitude)
-        //{
-        //    try
-        //    {
-        //        List<Album> albums = new List<Album>();
-        //        albums=context.Albums.Where(a=> a.Longitude==album.Longitude && a.Latitude==album.Latitude).ToList();
-        //        if (albums !=null)
-        //        {
-        //            List<AlbumDto> albumDtos = new List<AlbumDto>();
-        //            for (int i = 0; i < albums.Count; i++)
-        //            {
-        //                Album a= albums.ElementAt(i);
-        //                AlbumDto dto = await ConvertMedia(a);
-        //                albumDtos.Add( new AlbumDto () { AdminId = a.AdminId, AlbumCover=a.AlbumCover, AlbumTitle=a.AlbumTitle, Id=a.Id, Latitude=a.Latitude, Longitude=a.Longitude, Media=dto.Media });
-        //            }
-        //            return Ok(albumDtos);
-        //        }
+        [Route("GetAlbumsByLocation")]
+        [HttpPost]
+        public async Task<ActionResult<List<AlbumDto>>> GetAlbumsByLocationAsync([FromBody] Album album)
+        {
+            
+            try
+            {
 
-        //        return NotFound();
+                List<AlbumDto> albumdtos = new List<AlbumDto>();
+                var albums = context.Albums.Where(a => a.Longitude == album.Longitude && a.Latitude == album.Latitude);
 
-        //    }
-        //    catch (Exception ex)
-        //    {
+                if (albums != null)
+                {
+                    foreach (Album a in albums)
+                    {
+                        AlbumDto dto = await ConvertMembers(a);
+                        AlbumDto dto2 = await ConvertMedia(a);
+                        albumdtos.Add((new AlbumDto() { AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Id = a.Id, Latitude = a.Latitude, Longitude = a.Longitude, Media = dto2.Media, Members = dto.Members, MediaCount = a.MediaCount }));
+                    }
+                    return Ok(albumdtos);
+                }
+
+                //return NotFound();
 
 
-        //    }
-        //    return BadRequest();
 
 
-        //}
+            }
+            catch (Exception ex)
+            {
 
-        private async Task<AlbumDto> ConvertMedia(Album album)
+
+            }
+            return BadRequest();
+        }
+
+
+            //}
+
+            private async Task<AlbumDto> ConvertMedia(Album album)
         {
             AlbumDto albumDto = new AlbumDto();
             if (album.AlbumMedia != null)
@@ -336,7 +343,7 @@ namespace CollectiveMomentsServer.Controllers
             try
             {
 
-                var media = context.MediaItems.Where(m => m.AlbumId == albumId).ToList();
+                var media = await context.MediaItems.Where(m => m.AlbumId == albumId).ToListAsync();
                 List<Medium> media1 = new List<Medium>();
                 if (media != null)
                 {
@@ -349,6 +356,44 @@ namespace CollectiveMomentsServer.Controllers
 
                     }
                     return Ok(media1);
+                }
+
+                return NotFound();
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+            return BadRequest();
+
+
+        }
+
+        [Route("GetMembersByAlbum")]
+        [HttpGet]
+        public async Task<ActionResult<List<Medium>>> GetMembersByAlbumAsync([FromQuery] int albumId)
+        {
+            try
+            {
+
+                var members = context.Members.Where(m => m.AlbumId == albumId).ToList();
+                List<User> members1 = new List<User>();
+                if (members != null)
+                {
+
+                    foreach (var m in members)
+                    {
+                        var item = context.Users.Where(u => u.Id == m.UserId).FirstOrDefault();
+
+                        members1.Add(item);
+
+                    }
+                    return Ok(members1);
                 }
 
                 return NotFound();
@@ -494,14 +539,14 @@ namespace CollectiveMomentsServer.Controllers
 
         [Route("AddMember")]
         [HttpPost]
-        public async Task<ActionResult<bool>> AddMemberAsync(IFormFile file, [FromForm] string album, [FromForm] string user)
+        public async Task<ActionResult<bool>> AddMemberAsync( [FromQuery] int albumId, [FromQuery] int userId)
         {
             try
             {
-                Album? newalbum = JsonSerializer.Deserialize<Album>(album);
-                User? newuser= JsonSerializer.Deserialize<User>(user);
-                User u = context.Users.Find(newuser.Id);
-                Album a = context.Albums.Find(newalbum.Id);
+                //Album? newalbum = JsonSerializer.Deserialize<Album>(album);
+                //User? newuser= JsonSerializer.Deserialize<User>(user);
+                User u = context.Users.Find(userId);
+                Album a = context.Albums.Find(albumId);
                 if (u != null && a!=null)
                 {
                     Member m = new Member () { AlbumId=a.Id, UserId = u.Id };
