@@ -80,7 +80,13 @@ CREATE TABLE [dbo].[Members]
    
 )
 SET IDENTITY_INSERT [dbo].[Users] ON
-INSERT INTO [dbo].[Users] ([ID], [Email], [FirstName], [LastName], [Passwrd], [UserName]) VALUES (1, N'A', N'A', N'A', N'123', N'A')
+INSERT INTO [dbo].[Users] ([ID], [Email], [FirstName], [LastName], [Passwrd], [UserName], [ProfilePicture]) VALUES (1, N'A', N'A', N'A', N'123', N'A', N'emptyprofilepicture.jpg')
+INSERT INTO [dbo].[Users] ([ID], [Email], [FirstName], [LastName], [Passwrd], [UserName], [ProfilePicture]) VALUES (2, N'roni.n@gmail.com', N'Roni', N'Nativ', N'242', N'Roninativ', N'emptyprofilepicture.jpg')
+INSERT INTO [dbo].[Users] ([ID], [Email], [FirstName], [LastName], [Passwrd], [UserName], [ProfilePicture]) VALUES (3, N'roni.jacobovsky@gmail.com', N'Roni', N'j', N'192', N'Ronija', N'emptyprofilepicture.jpg')
+INSERT INTO [dbo].[Users] ([ID], [Email], [FirstName], [LastName], [Passwrd], [UserName], [ProfilePicture]) VALUES (4, N'yali.e@gmail.com', N'Yali', N'Eldar', N'121', N'Yali', N'emptyprofilepicture.jpg')
+INSERT INTO [dbo].[Users] ([ID], [Email], [FirstName], [LastName], [Passwrd], [UserName], [ProfilePicture]) VALUES (5, N'Talsi.@gmail.com', N'Tal', N'Simon', N'205', N'Talsi', N'emptyprofilepicture.jpg')
+INSERT INTO [dbo].[Users] ([ID], [Email], [FirstName], [LastName], [Passwrd], [UserName], [ProfilePicture]) VALUES (6, N'Avital.p@gmail.com', N'Avital', N'Persky', N'284', N'Avitalp', N'emptyprofilepicture.jpg')
+
 SET IDENTITY_INSERT [dbo].[Users] OFF
 
 SET IDENTITY_INSERT [dbo].[Album] ON
@@ -115,7 +121,14 @@ INSERT INTO [dbo].[MediaItem] ([ID], [AlbumID], [MediaID]) VALUES (4,5, 4)
 
 INSERT INTO [dbo].[Members] ([ID] , [UserID], [AlbumID]) VALUES (1,1, 7)
 INSERT INTO [dbo].[Members] ([ID], [UserID], [AlbumID]) VALUES (2,1, 6)
-
+INSERT INTO [dbo].[Members] ([ID], [UserID], [AlbumID]) VALUES (3,3, 5)
+INSERT INTO [dbo].[Members] ([ID], [UserID], [AlbumID]) VALUES (4,4, 5)
+INSERT INTO [dbo].[Members] ([ID], [UserID], [AlbumID]) VALUES (5,2, 8)
+INSERT INTO [dbo].[Members] ([ID], [UserID], [AlbumID]) VALUES (6,5, 2)
+INSERT INTO [dbo].[Members] ([ID], [UserID], [AlbumID]) VALUES (7,3, 9)
+INSERT INTO [dbo].[Members] ([ID], [UserID], [AlbumID]) VALUES (8,6, 1)
+INSERT INTO [dbo].[Members] ([ID], [UserID], [AlbumID]) VALUES (9,4, 3)
+INSERT INTO [dbo].[Members] ([ID], [UserID], [AlbumID]) VALUES (10,2, 4)
 
 
 

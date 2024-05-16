@@ -12,7 +12,7 @@ namespace CollectiveMomentsServer.Controllers
     {
         CollectiveMomentsDbContext context;
 
-        public CollectiveMomentsController (CollectiveMomentsDbContext context)
+        public CollectiveMomentsController(CollectiveMomentsDbContext context)
         {
             this.context = context;
         }
@@ -22,20 +22,21 @@ namespace CollectiveMomentsServer.Controllers
 
         public async Task<ActionResult<User>> LoginAsync([FromBody] User usr)
         {
-            try { 
-            User user = null;
+            try
+            {
+                User user = null;
 
-            user = context.Users.Where((u) => u.UserName == usr.UserName && u.Passwrd == usr.Passwrd).FirstOrDefault();
-            if (user != null)
-            { 
-                 HttpContext.Session.SetObject("user", user);
+                user = context.Users.Where((u) => u.UserName == usr.UserName && u.Passwrd == usr.Passwrd).FirstOrDefault();
+                if (user != null)
+                {
+                    HttpContext.Session.SetObject("user", user);
                     return Ok(user);
+                }
+                return Forbid();
             }
-                   return Forbid();
-            }
-            catch(Exception ex) { }
-            return BadRequest();    
-         
+            catch (Exception ex) { }
+            return BadRequest();
+
         }
 
         [Route("Register")]
@@ -49,7 +50,7 @@ namespace CollectiveMomentsServer.Controllers
                 if (response == false)
                 {
                     context.Users.Add(usr);
-                  await  context.SaveChangesAsync();
+                    await context.SaveChangesAsync();
                     return Ok(usr);
                 }
                 return Conflict();
@@ -58,25 +59,25 @@ namespace CollectiveMomentsServer.Controllers
             catch (Exception ex)
             {
 
-                
-            }
-            return BadRequest();    
 
-            
+            }
+            return BadRequest();
+
+
         }
         //
         [Route("UpdateUser")]
         [HttpPost]
-        public async Task<ActionResult<User>> UpdateUserAsync([FromBody] UserDto usr )
+        public async Task<ActionResult<User>> UpdateUserAsync([FromBody] UserDto usr)
         {
             try
             {
                 User u = context.Users.Find(usr.Id);
                 if (u != null)
                 {
-                    if(await UpdateUser1(u, usr))
-                    
-                    return Ok(u);
+                    if (await UpdateUser1(u, usr))
+
+                        return Ok(u);
                     return BadRequest();
                 }
                 else
@@ -90,23 +91,23 @@ namespace CollectiveMomentsServer.Controllers
             return BadRequest();
         }
 
-        private async Task<bool>  UpdateUser1 (User u, UserDto user)
+        private async Task<bool> UpdateUser1(User u, UserDto user)
         {
-            
-                if (user.Firstname!=null)
-                    u.FirstName = user.Firstname;
-                if (user.Lastname != null)
-                    u.LastName = user.Lastname;
-                if (user.Passwrd != null)
-                    u.Passwrd = user.Passwrd;
-                if (user.Email != null)
-                    u.Email = user.Email;
-                if (user.Username != null)
-                    u.UserName = user.Username;
+
+            if (user.Firstname != null)
+                u.FirstName = user.Firstname;
+            if (user.Lastname != null)
+                u.LastName = user.Lastname;
+            if (user.Passwrd != null)
+                u.Passwrd = user.Passwrd;
+            if (user.Email != null)
+                u.Email = user.Email;
+            if (user.Username != null)
+                u.UserName = user.Username;
             if (user.ProfilePicture != null)
                 u.ProfilePicture = user.ProfilePicture;
             try { await context.SaveChangesAsync(); return true; }
-            catch (Exception ex) { return false; }    
+            catch (Exception ex) { return false; }
         }
 
         //[Route("GetAlbumsByLocation")]
@@ -141,10 +142,10 @@ namespace CollectiveMomentsServer.Controllers
 
 
         //}
-        
-        private async Task<AlbumDto> ConvertMedia (Album album)
+
+        private async Task<AlbumDto> ConvertMedia(Album album)
         {
-            AlbumDto albumDto= new AlbumDto();
+            AlbumDto albumDto = new AlbumDto();
             if (album.AlbumMedia != null)
             {
                 for (int i = 0; i < album.AlbumMedia.Count; i++)
@@ -153,7 +154,7 @@ namespace CollectiveMomentsServer.Controllers
                     albumDto.Media.Add(a.Media);
                 }
             }
-            return albumDto;    
+            return albumDto;
         }
 
         private async Task<AlbumDto> ConvertMembers(Album album)
@@ -172,13 +173,13 @@ namespace CollectiveMomentsServer.Controllers
 
         [Route("CreateAlbum")]
         [HttpPost]
-        public async Task<ActionResult<Album>> CreateAlbumAsync( IFormFile file, [FromForm] string album)
+        public async Task<ActionResult<Album>> CreateAlbumAsync(IFormFile file, [FromForm] string album)
         {
             try
             {
                 Album? filealbum = JsonSerializer.Deserialize<Album>(album);
                 IFormFile f = file;
-                context.Albums.Add(filealbum) ;
+                context.Albums.Add(filealbum);
                 await context.SaveChangesAsync();
                 await UpdatePath(f, filealbum);
                 return Ok(filealbum);
@@ -249,7 +250,7 @@ namespace CollectiveMomentsServer.Controllers
         //    catch (Exception ex)
         //    {
 
-                
+
         //    }
         //    return BadRequest();
 
@@ -273,13 +274,13 @@ namespace CollectiveMomentsServer.Controllers
         //                AlbumDto dto = await ConvertMembers(a);
         //                 AlbumDto dto2 = await ConvertMedia(a);
         //                albumdtos.Add((new AlbumDto() { AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Id = a.Id, Latitude = a.Latitude, Longitude = a.Longitude, Media = dto2.Media, Members = dto.Members }));
-                            
+
         //             }
         //            return Ok(albumdtos);
         //        }
-                    
 
-                
+
+
         //        return NotFound();
 
         //    }
@@ -298,9 +299,9 @@ namespace CollectiveMomentsServer.Controllers
         {
             try
             {
-                
+
                 List<AlbumDto> albumdtos = new List<AlbumDto>();
-                var albums = context.Albums.Where( al=> al.AdminId==userId|| al.Members.Any(mm=>mm.UserId==userId)); 
+                var albums = context.Albums.Where(al => al.AdminId == userId || al.Members.Any(mm => mm.UserId == userId));
 
                 if (albums != null)
                 {
@@ -308,15 +309,15 @@ namespace CollectiveMomentsServer.Controllers
                     {
                         AlbumDto dto = await ConvertMembers(a);
                         AlbumDto dto2 = await ConvertMedia(a);
-                       albumdtos.Add((new AlbumDto() { AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Id = a.Id, Latitude = a.Latitude, Longitude = a.Longitude, Media = dto2.Media, Members = dto.Members, MediaCount=a.MediaCount }));
-                      }
+                        albumdtos.Add((new AlbumDto() { AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Id = a.Id, Latitude = a.Latitude, Longitude = a.Longitude, Media = dto2.Media, Members = dto.Members, MediaCount = a.MediaCount }));
+                    }
                     return Ok(albumdtos);
                 }
 
                 //return NotFound();
 
-            
-                
+
+
 
             }
             catch (Exception ex)
@@ -334,8 +335,8 @@ namespace CollectiveMomentsServer.Controllers
         {
             try
             {
-               
-                var media = context.MediaItems.Where(m=> m.AlbumId == albumId).ToList();
+
+                var media = context.MediaItems.Where(m => m.AlbumId == albumId).ToList();
                 List<Medium> media1 = new List<Medium>();
                 if (media != null)
                 {
@@ -344,7 +345,7 @@ namespace CollectiveMomentsServer.Controllers
                     foreach (var m in media)
                     {
                         media1.Add(m.Media);
-                        
+
                     }
                     return Ok(media1);
                 }
@@ -375,8 +376,8 @@ namespace CollectiveMomentsServer.Controllers
                 Album a = context.Albums.Find(filealbum.Id);
                 if (a != null)
                 {
-                    AlbumDto dto= await ConvertMedia(a);
-                    AlbumDto alb = new AlbumDto() { Id = a.Id, AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Latitude = a.Latitude, Longitude = a.Longitude, Media=dto.Media };
+                    AlbumDto dto = await ConvertMedia(a);
+                    AlbumDto alb = new AlbumDto() { Id = a.Id, AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Latitude = a.Latitude, Longitude = a.Longitude, Media = dto.Media };
                     Medium? media = JsonSerializer.Deserialize<Medium>(photo);
                     bool IsUpdated = await UpdateMediaPath(file, media, alb);
                     if (IsUpdated == true)
@@ -401,9 +402,9 @@ namespace CollectiveMomentsServer.Controllers
                 {
                     file.CopyTo(fileStream);
                 }
-                
+
                 media.Sources = mediapath;
-                album.Media.Add(media); 
+                album.Media.Add(media);
                 await context.SaveChangesAsync();
                 return true;
             }
@@ -424,9 +425,9 @@ namespace CollectiveMomentsServer.Controllers
                 if (a != null)
                 {
                     await UpdatePath(f, a);
-                   return Ok(a.AlbumCover);
+                    return Ok(a.AlbumCover);
                 }
-                
+
             }
             catch (Exception ex) { }
             return BadRequest();
@@ -434,11 +435,98 @@ namespace CollectiveMomentsServer.Controllers
         }
 
 
+        [Route("UpdateAlbum")]
+        [HttpPost]
+        public async Task<ActionResult<bool>> UpdateAlbumAsync([FromBody] Album album)
+        {
+            try
+            {
+                Album a = context.Albums.Find(album.Id);
+                if (a != null)
+                {
+                    a.AlbumTitle = album.AlbumTitle;
+                    await context.SaveChangesAsync();
+
+
+                    return Ok(true);
+
+                }
+                else
+                    return Forbid();
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+            return BadRequest();
+        }
+
+        [Route("DeleteUser")]
+        [HttpPost]
+        public async Task<ActionResult<bool>> DeleteUserAsync(IFormFile file, [FromForm] string album, [FromForm] string user)
+        {
+            try
+            {
+                User u = context.Users.Find(user.Id);
+                if (u != null)
+                {
+                    //await context.Users.ExecuteDeleteAsync(user.Id);
+                    await context.SaveChangesAsync();
+
+
+                    return Ok(true);
+
+                }
+                else
+                    return Forbid();
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+            return BadRequest();
+        }
+
+
+
+        [Route("AddMember")]
+        [HttpPost]
+        public async Task<ActionResult<bool>> AddMemberAsync(IFormFile file, [FromForm] string album, [FromForm] string user)
+        {
+            try
+            {
+                Album? newalbum = JsonSerializer.Deserialize<Album>(album);
+                User? newuser= JsonSerializer.Deserialize<User>(user);
+                User u = context.Users.Find(newuser.Id);
+                Album a = context.Albums.Find(newalbum.Id);
+                if (u != null && a!=null)
+                {
+                    Member m = new Member () { AlbumId=a.Id, UserId = u.Id };
+                     context.Members.Add(m);
+                    await context.SaveChangesAsync();
+
+
+                    return Ok(true);
+
+                }
+                else
+                    return Forbid();
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+            return BadRequest();
+        }
+
+
+        
+
 
     }
-
-
-
 }
 
 
