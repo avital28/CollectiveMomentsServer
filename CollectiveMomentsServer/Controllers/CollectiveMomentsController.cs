@@ -340,11 +340,12 @@ namespace CollectiveMomentsServer.Controllers
                 List<Medium> media1 = new List<Medium>();
                 if (media != null)
                 {
-                    var items = context.MediaItems.Where(m => m.AlbumId == albumId).ToList();
 
                     foreach (var m in media)
                     {
-                        media1.Add(m.Media);
+                        var item = context.Media.Where(a => a.Id==m.MediaId).FirstOrDefault();
+
+                        media1.Add(item);
 
                     }
                     return Ok(media1);
@@ -462,32 +463,32 @@ namespace CollectiveMomentsServer.Controllers
             return BadRequest();
         }
 
-        [Route("DeleteUser")]
-        [HttpPost]
-        public async Task<ActionResult<bool>> DeleteUserAsync(IFormFile file, [FromForm] string album, [FromForm] string user)
-        {
-            try
-            {
-                User u = context.Users.Find(user.Id);
-                if (u != null)
-                {
-                    //await context.Users.ExecuteDeleteAsync(user.Id);
-                    //await context.SaveChangesAsync();
+        //[Route("DeleteUser")]
+        //[HttpPost]
+        //public async Task<ActionResult<bool>> DeleteUserAsync(IFormFile file, [FromForm] string album, [FromForm] string user)
+        //{
+        //    try
+        //    {
+        //        User u = context.Users.Find(user.Id);
+        //        if (u != null)
+        //        {
+        //            //await context.Users.ExecuteDeleteAsync(user.Id);
+        //            //await context.SaveChangesAsync();
 
 
-                    return Ok(true);
+        //            return Ok(true);
 
-                }
-                else
-                    return Forbid();
-            }
-            catch (Exception ex)
-            {
+        //        }
+        //        else
+        //            return Forbid();
+        //    }
+        //    catch (Exception ex)
+        //    {
 
 
-            }
-            return BadRequest();
-        }
+        //    }
+        //    return BadRequest();
+        //}
 
 
 
