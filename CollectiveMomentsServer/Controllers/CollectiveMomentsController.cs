@@ -472,7 +472,7 @@ namespace CollectiveMomentsServer.Controllers
                 if (u != null)
                 {
                     //await context.Users.ExecuteDeleteAsync(user.Id);
-                    await context.SaveChangesAsync();
+                    //await context.SaveChangesAsync();
 
 
                     return Ok(true);
