@@ -568,8 +568,49 @@ namespace CollectiveMomentsServer.Controllers
             return BadRequest();
         }
 
+        [Route("DeleteMember")]
+        [HttpDelete]
+        public async Task<ActionResult<bool>> DeleteMemberAsync([FromQuery] int albumId, [FromQuery] int userId)
+        {
+            try
+            {
+                var str = HttpContext.Session.Get("user");
+                if (str == null)
+                {
+                    return Forbid();
+                }
+                var user = JsonSerializer.Deserialize<User>(str);
+                //Album? newalbum = JsonSerializer.Deserialize<Album>(album);
+                //User? newuser= JsonSerializer.Deserialize<User>(user);
+                
 
-        
+                Album a = context.Albums.Find(albumId);
+                if (user != null && a != null && a.AdminId == user.Id)
+                {
+
+                    a.Members.Remove(context.Members.Where(m => m.UserId == user.Id).FirstOrDefault());
+
+
+                    await context.SaveChangesAsync();
+
+
+                    return Ok(true);
+
+                }
+                else
+                    return Forbid();
+                
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+            return BadRequest();
+        }
+
+
+
 
 
     }
