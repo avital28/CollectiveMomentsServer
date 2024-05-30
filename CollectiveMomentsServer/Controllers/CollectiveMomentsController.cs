@@ -112,23 +112,22 @@ namespace CollectiveMomentsServer.Controllers
         }
 
         [Route("GetAlbumsByLocation")]
-        [HttpPost]
-        public async Task<ActionResult<List<AlbumDto>>> GetAlbumsByLocationAsync([FromBody] Album album)
+        [HttpGet]
+        public async Task<ActionResult<List<AlbumDto>>> GetAlbumsByLocationAsync([FromQuery] string Longitude, [FromQuery] string Latitude)
         {
             
             try
             {
 
                 List<AlbumDto> albumdtos = new List<AlbumDto>();
-                var albums = context.Albums.Where(a => a.Longitude == album.Longitude && a.Latitude == album.Latitude);
+                var albums = context.Albums.Where(a => a.Longitude == Longitude && a.Latitude == Latitude);
 
                 if (albums != null)
                 {
                     foreach (Album a in albums)
                     {
-                        AlbumDto dto = await ConvertMembers(a);
-                        AlbumDto dto2 = await ConvertMedia(a);
-                        albumdtos.Add((new AlbumDto() { AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Id = a.Id, Latitude = a.Latitude, Longitude = a.Longitude, Media = dto2.Media, Members = dto.Members, MediaCount = a.MediaCount }));
+                        
+                        albumdtos.Add((new AlbumDto() { AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Id = a.Id, Latitude = a.Latitude, Longitude = a.Longitude, MediaCount = a.MediaCount }));
                     }
                     return Ok(albumdtos);
                 }
@@ -465,6 +464,11 @@ namespace CollectiveMomentsServer.Controllers
         {
             try
             {
+                var str = HttpContext.Session.Get("user");
+                if (str == null)
+                {
+                    return Forbid();
+                }
                 Album? filealbum = JsonSerializer.Deserialize<Album>(album);
                 IFormFile f = file;
                 Album a = context.Albums.Find(filealbum.Id);
@@ -487,6 +491,11 @@ namespace CollectiveMomentsServer.Controllers
         {
             try
             {
+                var str = HttpContext.Session.Get("user");
+                if (str == null)
+                {
+                    return Forbid();
+                }
                 Album a = context.Albums.Find(album.Id);
                 if (a != null)
                 {
@@ -543,8 +552,7 @@ namespace CollectiveMomentsServer.Controllers
         {
             try
             {
-                //Album? newalbum = JsonSerializer.Deserialize<Album>(album);
-                //User? newuser= JsonSerializer.Deserialize<User>(user);
+                
                 User u = context.Users.Find(userId);
                 Album a = context.Albums.Find(albumId);
                 if (u != null && a!=null)
@@ -580,17 +588,11 @@ namespace CollectiveMomentsServer.Controllers
                     return Forbid();
                 }
                 var user = JsonSerializer.Deserialize<User>(str);
-                //Album? newalbum = JsonSerializer.Deserialize<Album>(album);
-                //User? newuser= JsonSerializer.Deserialize<User>(user);
-                
-
                 Album a = context.Albums.Find(albumId);
                 if (user != null && a != null && a.AdminId == user.Id)
                 {
 
                     a.Members.Remove(context.Members.Where(m => m.UserId == user.Id).FirstOrDefault());
-
-
                     await context.SaveChangesAsync();
 
 
