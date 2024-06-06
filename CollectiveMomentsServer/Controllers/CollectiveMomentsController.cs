@@ -113,7 +113,7 @@ namespace CollectiveMomentsServer.Controllers
 
         [Route("GetAlbumsByLocation")]
         [HttpGet]
-        public async Task<ActionResult<List<AlbumDto>>> GetAlbumsByLocationAsync([FromQuery] string Longitude, [FromQuery] string Latitude)
+        public async Task<ActionResult<List<AlbumDto>>> GetAlbumsByLocationAsync([FromQuery] string Longitude, [FromQuery] string Latitude, [FromQuery] int id)
         {
             
             try
@@ -124,16 +124,12 @@ namespace CollectiveMomentsServer.Controllers
 
                 if (albums != null)
                 {
-                    var str = HttpContext.Session.Get("user");
-                    if (str == null)
-                    {
-                        return Forbid();
-                    }
-                    var user = JsonSerializer.Deserialize<User>(str);
+                   
+                    
                     foreach (Album a in albums)
                     {
 
-                        if (a.AdminId!=user.Id)
+           
                         albumdtos.Add((new AlbumDto() { AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Id = a.Id, Latitude = a.Latitude, Longitude = a.Longitude, MediaCount = a.MediaCount }));
                     }
                     return Ok(albumdtos);
@@ -429,7 +425,7 @@ namespace CollectiveMomentsServer.Controllers
                 if (a != null)
                 {
                     AlbumDto dto = await ConvertMedia(a);
-                    AlbumDto alb = new AlbumDto() { Id = a.Id, AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Latitude = a.Latitude, Longitude = a.Longitude, Media = dto.Media };
+                    AlbumDto alb = new AlbumDto() { Id = a.Id, AdminId = a.AdminId, AlbumCover = a.AlbumCover, AlbumTitle = a.AlbumTitle, Latitude = a.Latitude, Longitude = a.Longitude, MediaCount=a.MediaCount, Media = dto.Media };
                     Medium? media = JsonSerializer.Deserialize<Medium>(photo);
                     bool IsUpdated = await UpdateMediaPath(file, media, alb);
                     if (IsUpdated == true)
